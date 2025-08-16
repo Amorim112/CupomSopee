@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cupom Mercado Livre</title>
+  <style>
+    :root{ --bg:#0b0d12; --fg:#e9eef5; --card:#141821; --accent:#ffd04d; --muted:#a9b7c6; --ok:#25D366 }
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Arial,sans-serif}
+    .wrap{max-width:880px;margin:36px auto;padding:0 16px}
+    a.back{color:#9ecbff;text-decoration:none}
+    .small{color:var(--muted);font-size:13px}
+    .card{background:var(--card);border:1px solid #223049;border-radius:16px;padding:18px;margin-top:12px}
+    .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+    .code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0e121a;border:1px dashed #334861;
+          border-radius:12px;padding:12px 14px;font-size:18px;letter-spacing:.5px;min-width:220px}
+    .hidden{filter:blur(6px);user-select:none}
+    .btn{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#1a1a1a}
+    .btn-copy{background:#2b364a;color:#e9eef5}
+    .btn-whats{background:var(--ok);color:#0b0d12;text-decoration:none;display:inline-block;text-align:center}
+    .bad{background:#330e0e;border:1px solid #5e1c1c;border-radius:12px;padding:12px;margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="./index.html">← Voltar</a>
+    <h1>💛 Cupom Mercado Livre</h1>
+    <div id="updated" class="small"></div>
+
+    <section class="card">
+      <div class="row">
+        <div style="min-width:260px;flex:1">
+          <div class="small">Cupom:</div>
+          <div id="cupom" class="code hidden" aria-live="polite">—</div>
+          <div id="expira" class="small" style="margin-top:6px"></div>
+          <div id="desc" class="small" style="margin-top:4px"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:220px">
+          <button id="btn-obter" class="btn btn-primary">👉 Obter cupom</button>
+          <button id="btn-copiar" class="btn btn-copy" style="display:none">📋 Copiar código</button>
+          <a id="btn-whats" class="btn btn-whats" style="display:none" target="_blank" rel="noopener">💬 Enviar no WhatsApp</a>
+        </div>
+      </div>
+      <div id="alert" class="bad" style="display:none"></div>
+    </section>
+  </div>
+
+  <script>
+    let DATA = { cupom:"", link:"" };
+
+    async function carregar() {
+      try{
+        const r = await fetch(`./coupons_ml.json?ver=${Date.now()}`, {cache:"no-store"});
+        if(!r.ok) throw new Error(`Erro ${r.status} ao ler coupons_ml.json`);
+        const data = await r.json(); DATA = data;
+
+        document.getElementById('cupom').textContent = data.cupom || '—';
+        document.getElementById('desc').textContent   = data.descricao ? `ℹ️ ${data.descricao}` : '';
+        document.getElementById('expira').textContent = data.expira_em ? `⏳ Válido até: ${data.expira_em}` : '';
+        document.getElementById('updated').textContent= data.atualizado_em ? `Atualizado: ${new Date(data.atualizado_em).toLocaleString('pt-BR')}` : '';
+
+        const msg = encodeURIComponent(`🔥 Cupom ${data.cupom} — Use aqui: ${data.link}`);
+        const btnWhats = document.getElementById('btn-whats');
+        btnWhats.href = `https://wa.me/?text=${msg}`;
+      }catch(e){
+        const alert = document.getElementById('alert');
+        alert.style.display='block';
+        alert.innerHTML = `<b>Não foi possível carregar.</b><br><small>${e.message}</small>`;
+        console.error(e);
+      }
+    }
+
+    function onObter(){
+      try{
+        if(!DATA || !DATA.link) throw new Error("Link do cupom indisponível.");
+        document.getElementById('cupom').classList.remove('hidden');
+        document.getElementById('btn-copiar').style.display='inline-block';
+        document.getElementById('btn-whats').style.display='inline-block';
+        const newTab = window.open(DATA.link,'_blank','noopener');
+        if(!newTab){
+          const alert = document.getElementById('alert');
+          alert.style.display='block';
+          alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
+        }
+      }catch(e){
+        const alert = document.getElementById('alert');
+        alert.style.display='block';
+        alert.textContent = e.message;
+      }
+    }
+
+    async function onCopiar(){
+      try{
+        await navigator.clipboard.writeText(DATA.cupom);
+        const btn = document.getElementById('btn-copiar'), old=btn.textContent;
+        btn.textContent="✅ Copiado!"; setTimeout(()=>btn.textContent=old,1500);
+      }catch{ /* ignore */ }
+    }
+
+    document.getElementById('btn-obter').addEventListener('click', onObter);
+    document.getElementById('btn-copiar').addEventListener('click', onCopiar);
+    carregar();
+  </script>
+</body>
+</html>
