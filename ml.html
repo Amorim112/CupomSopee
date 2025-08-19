@@ -4,6 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cupom Mercado Livre</title>
+
+  <!-- 🔥 Anti-cache para o HTML -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <style>
     :root{ --bg:#0b0d12; --fg:#e9eef5; --card:#141821; --accent:#ffd04d; --muted:#a9b7c6; --ok:#25D366 }
     body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Arial,sans-serif}
@@ -20,12 +26,16 @@
     .btn-copy{background:#2b364a;color:#e9eef5}
     .btn-whats{background:var(--ok);color:#0b0d12;text-decoration:none;display:inline-block;text-align:center}
     .bad{background:#330e0e;border:1px solid #5e1c1c;border-radius:12px;padding:12px;margin-top:10px}
+    .toolbar{display:flex;gap:10px;align-items:center;margin:8px 0 0}
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>💛 Cupom Mercado Livre</h1>
-    <div id="updated" class="small"></div>
+    <div class="toolbar">
+      <div id="updated" class="small"></div>
+      <button id="btn-recarregar" class="btn btn-copy" title="Recarregar dados">🔄 Atualizar</button>
+    </div>
 
     <section class="card">
       <div class="row">
@@ -49,26 +59,55 @@
   <script>
     let DATA = { cupom:"", link:"" };
 
+    const jsonUrl = () => {
+      const bust = Date.now().toString(36); // menor e sempre diferente
+      return `./coupons_ml.json?t=${bust}`;
+    };
+
+    async function fetchComRetry(maxTentativas = 3, atrasoMs = 800) {
+      let ultimaErro;
+      for (let i = 0; i < maxTentativas; i++) {
+        try {
+          const r = await fetch(jsonUrl(), { cache: "no-store" });
+          if (!r.ok) throw new Error(`Erro ${r.status} ao ler coupons_ml.json`);
+          return await r.json();
+        } catch (e) {
+          ultimaErro = e;
+          // espera e tenta de novo (propagação do Pages pode demorar alguns segundos)
+          await new Promise(res => setTimeout(res, atrasoMs));
+        }
+      }
+      throw ultimaErro;
+    }
+
     async function carregar() {
-      try{
-        const r = await fetch(`./coupons_ml.json?ver=${Date.now()}`, {cache:"no-store"});
-        if(!r.ok) throw new Error(`Erro ${r.status} ao ler coupons_ml.json`);
-        const data = await r.json(); DATA = data;
+      try {
+        const data = await fetchComRetry();
+        DATA = data;
 
         document.getElementById('cupom').textContent = data.cupom || '—';
         document.getElementById('desc').textContent   = data.descricao ? `ℹ️ ${data.descricao}` : '';
-        document.getElementById('expira').textContent = data.expira_em ? `⏳ Válido até: ${data.expira_em}` : '';
-        document.getElementById('updated').textContent= data.atualizado_em ? `Atualizado: ${new Date(data.atualizado_em).toLocaleString('pt-BR')}` : '';
+        document.getElementById('expira').textContent = data.expira_em ? `⏳ Válido até: ${normalizarData(data.expira_em)}` : '';
+        document.getElementById('updated').textContent= data.atualizado_em ? `Atualizado: ${normalizarData(data.atualizado_em, true)}` : '';
 
         const msg = encodeURIComponent(`🔥 Cupom ${data.cupom} — Use aqui: ${data.link}`);
         const btnWhats = document.getElementById('btn-whats');
         btnWhats.href = `https://wa.me/?text=${msg}`;
-      }catch(e){
+      } catch(e) {
         const alert = document.getElementById('alert');
         alert.style.display='block';
         alert.innerHTML = `<b>Não foi possível carregar.</b><br><small>${e.message}</small>`;
         console.error(e);
       }
+    }
+
+    function normalizarData(valor, mostrarHora = false) {
+      // aceita ISO completo ou data curta; formata para pt-BR
+      const d = new Date(valor);
+      return d.toLocaleString('pt-BR', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        ...(mostrarHora ? { hour: '2-digit', minute: '2-digit', second: '2-digit' } : {})
+      });
     }
 
     function onObter(){
@@ -92,11 +131,18 @@
 
     async function onCopiar(){
       try{
-        await navigator.clipboard.writeText(DATA.cupom);
+        await navigator.clipboard.writeText(DATA.cupom || '');
         const btn = document.getElementById('btn-copiar'), old=btn.textContent;
         btn.textContent="✅ Copiado!"; setTimeout(()=>btn.textContent=old,1500);
       }catch{ /* ignore */ }
     }
+
+    // botão Atualizar
+    document.getElementById('btn-recarregar').addEventListener('click', carregar);
+    // quando voltar para a aba, recarrega os dados
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') carregar();
+    });
 
     document.getElementById('btn-obter').addEventListener('click', onObter);
     document.getElementById('btn-copiar').addEventListener('click', onCopiar);
