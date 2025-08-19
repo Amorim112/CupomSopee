@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seus Links | Afiliados</title>
+  <meta name="description" content="Todos os links importantes do meu negócio de afiliados em um só lugar." />
+  <meta property="og:title" content="Seus Links | Afiliados" />
+  <meta property="og:description" content="Entre nos grupos e siga nas redes. Ofertas, cupons e conteúdos!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Seus+Links" />
+  <meta name="theme-color" content="#09090b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--radius:1.25rem}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .glass{backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: rgba(255,255,255,.06);}
+    .btn{border-radius:var(--radius)}
+    .btn:hover{transform:translateY(-2px)}
+    .btn:active{transform:translateY(0)}
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-950 to-black text-zinc-100">
+  <main class="max-w-xl mx-auto px-6 pb-16">
+    <!-- Header / Perfil -->
+    <section class="pt-14 text-center">
+      <div class="inline-flex items-center gap-4">
+        <img src="https://drive.google.com/uc?id=1t5momFjQoYzzxdgDGLE-lf4pfoH8Se82" alt="Logo/Avatar" class="w-20 h-20 rounded-full ring-2 ring-white/10 shadow" />
+        <div class="text-left">
+          <h1 class="text-2xl font-semibold leading-tight">Ela Pode + • Links Oficiais</h1>
+          <p class="text-sm text-zinc-300">Cupons, ofertas e conteúdos novos todos os dias ✨</p>
+        </div>
+      </div>
+
+      <div class="glass border border-white/10 rounded-2xl mt-6 p-4 text-sm">
+        ✅ Dica: salve esta página nos favoritos para não perder os cupons!
+      </div>
+    </section>
+
+    <!-- Links -->
+    <section class="mt-8 grid gap-3">
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">💬 Grupo do WhatsApp</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">📣 Grupo do Telegram</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">👛 Grupo de Acessórios & Maquiagem</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">💄 Grupo de Acessórios Femininos</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">𝕏 Perfil no X (Twitter)</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">▶️ YouTube</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">📷 Instagram</a>
+      <a class="btn block w-full border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 text-center font-medium" href="#" target="_blank" rel="noopener noreferrer">📰 Blog</a>
+      <a class="btn block w-full border border-emerald-500/30 bg-emerald-600/20 hover:bg-emerald-600/30 transition p-4 text-center font-semibold" href="#" target="_blank" rel="noopener noreferrer">🏷️ Página de Cupons (Oficial)</a>
+    </section>
+
+    <section class="mt-10 grid gap-4">
+      <div class="glass border border-white/10 rounded-2xl p-5">
+        <h2 class="text-lg font-semibold">🔥 Cupom do Dia</h2>
+        <p class="text-sm text-zinc-300 mt-1">Aproveite antes de expirar. Atualizamos diariamente.</p>
+        <div class="mt-4 flex gap-3">
+          <button id="copy-coupon" class="btn px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10">Copiar link</button>
+          <a id="go-coupon" class="btn px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30" href="#" target="_blank" rel="noopener">Abrir cupom</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-12 text-center text-xs text-zinc-400">
+      <p>© <span id="ano"></span> Ela Pode +. Todos os direitos reservados.</p>
+      <p class="mt-1">Parcerias e suporte: <a class="underline hover:no-underline" href="mailto:contato@exemplo.com">contato@exemplo.com</a></p>
+    </footer>
+  </main>
+
+  <script>
+    const LINKS = {
+      whatsapp: "https://chat.whatsapp.com/SEU_LINK",
+      telegram: "https://t.me/SEU_CANAL_OU_GRUPO",
+      acessoriosMaquiagem: "https://chat.whatsapp.com/SEU_LINK_ACESSO
