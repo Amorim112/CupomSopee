@@ -29,10 +29,10 @@
     <!-- Header / Perfil -->
     <section class="pt-14 text-center">
       <div class="inline-flex items-center gap-4">
-        <img src="https://drive.google.com/file/d/1xj9TkRN6tLCbtDS7XsmCnMvnGVMvBrps/view?usp=drive_link" alt="Logo/Avatar" class="w-20 h-20 rounded-full ring-2 ring-white/10 shadow" />
+        <img src="https://drive.google.com/thumbnail?id=1xj9TkRN6tLCbtDS7XsmCnMvnGVMvBrps&sz=w256&v=20250819" alt="Logo/Avatar" class="w-20 h-20 rounded-full ring-2 ring-white/10 shadow" onerror="this.src='https://via.placeholder.com/80?text=Logo';" />
         <div class="text-left">
-          <h1 class="text-2xl font-semibold leading-tight">Cupons e Ofertas Amorim Links Oficiais. </h1>
-          <p class="text-sm text-zinc-300">Para os Melhores Cupons e Ofertas Mercado Livre , Shopee e Amazon e conteúdos novos todos os dias ✨</p>
+          <h1 class="text-2xl font-semibold leading-tight">Ela Pode + • Links Oficiais</h1>
+          <p class="text-sm text-zinc-300">Cupons, ofertas e conteúdos novos todos os dias ✨</p>
         </div>
       </div>
 
@@ -67,8 +67,8 @@
     </section>
 
     <footer class="mt-12 text-center text-xs text-zinc-400">
-      <p>© <span id="ano"></span> Ofertas e Cupons Amorim +. Todos os direitos reservados.</p>
-      
+      <p>© <span id="ano"></span> Ela Pode +. Todos os direitos reservados.</p>
+      <p class="mt-1">Parcerias e suporte: <a class="underline hover:no-underline" href="mailto:contato@exemplo.com">contato@exemplo.com</a></p>
     </footer>
   </main>
 
@@ -76,4 +76,45 @@
     const LINKS = {
       whatsapp: "https://chat.whatsapp.com/SEU_LINK",
       telegram: "https://t.me/SEU_CANAL_OU_GRUPO",
-      acessoriosMaquiagem: "https://chat.whatsapp.com/SEU_LINK_ACESSO
+      acessoriosMaquiagem: "https://chat.whatsapp.com/SEU_LINK_ACESSORIOS_MAQUIAGEM",
+      acessoriosFemininos: "https://chat.whatsapp.com/SEU_LINK_ACESSORIOS_FEMININOS",
+      x: "https://x.com/SEU_USUARIO",
+      youtube: "https://www.youtube.com/@SEU_CANAL",
+      tiktok: "https://www.tiktok.com/@SEU_USUARIO",
+      instagram: "https://www.instagram.com/SEU_USUARIO",
+      blog: "https://seublog.com",
+      cupons: "https://amorim112.github.io/CupomSopee/"
+    };
+
+    const anchors = document.querySelectorAll('a');
+    anchors.forEach(a => {
+      const text = a.textContent || '';
+      if (text.includes('WhatsApp')) a.href = LINKS.whatsapp;
+      if (text.includes('Telegram')) a.href = LINKS.telegram;
+      if (text.includes('Acessórios & Maquiagem')) a.href = LINKS.acessoriosMaquiagem;
+      if (text.includes('Acessórios Femininos')) a.href = LINKS.acessoriosFemininos;
+      if (text.includes('Perfil no X')) a.href = LINKS.x;
+      if (text.includes('YouTube')) a.href = LINKS.youtube;
+      if (text.includes('TikTok')) a.href = LINKS.tiktok;
+      if (text.includes('Instagram')) a.href = LINKS.instagram;
+      if (text.includes('Blog')) a.href = LINKS.blog;
+      if (text.includes('Página de Cupons')) a.href = LINKS.cupons;
+    });
+
+    const goCoupon = document.getElementById('go-coupon');
+    const copyCoupon = document.getElementById('copy-coupon');
+    if (goCoupon) goCoupon.href = LINKS.cupons;
+    if (copyCoupon) copyCoupon.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(LINKS.cupons);
+        copyCoupon.textContent = 'Copiado!';
+        setTimeout(() => copyCoupon.textContent = 'Copiar link', 1500);
+      } catch(e) {
+        alert('Não foi possível copiar.');
+      }
+    });
+
+    document.getElementById('ano').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
