@@ -4,6 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cupons do Amorim</title>
+
+  <!-- 🔥 Meta tags para evitar cache -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <style>
     :root{--bg:#0b0d12;--fg:#e9eef5;--card:#141821;--accent:#ffd04d}
     body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Arial,sans-serif}
@@ -25,15 +31,25 @@
       <div class="card">
         <h2>💛 Mercado Livre</h2>
         <p>Abra a página para revelar o cupom do Mercado Livre.</p>
-        <a class="btn" href="./ml.html">Abrir Mercado Livre</a>
+        <!-- 🔥 Força reload sempre -->
+        <a class="btn" href="./ml.html?nocache={{Date.now()}}">Abrir Mercado Livre</a>
       </div>
 
       <div class="card">
         <h2>🟠 Shopee</h2>
         <p>Abra a página para revelar o cupom da Shopee.</p>
-        <a class="btn" href="./shopee.html">Abrir Shopee</a>
+        <!-- 🔥 Força reload sempre -->
+        <a class="btn" href="./shopee.html?nocache={{Date.now()}}">Abrir Shopee</a>
       </div>
     </div>
   </div>
+
+  <!-- Script para substituir {{Date.now()}} dinamicamente -->
+  <script>
+    document.querySelectorAll('a.btn').forEach(link => {
+      const baseHref = link.getAttribute('href').split('?')[0];
+      link.href = `${baseHref}?nocache=${Date.now()}`;
+    });
+  </script>
 </body>
 </html>
