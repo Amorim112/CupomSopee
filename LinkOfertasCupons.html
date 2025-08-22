@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-    <style>
+  <style>
     :root{--radius:1.25rem}
     html,body{height:100%}
     body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
@@ -46,6 +46,12 @@
       <div class="grid grid-cols-2 gap-2">
         <a class="btn p-3 text-center transition text-green-500 bg-green-500/15 hover:bg-green-500/25 border border-green-500/30" href="#" target="_blank" rel="noopener noreferrer"><img aria-hidden="true" src="https://cdn.simpleicons.org/whatsapp/25D366" class="icon" alt=""> Grupo do WhatsApp</a>
         <a class="btn p-3 text-center transition text-sky-500 bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30" href="#" target="_blank" rel="noopener noreferrer"><img aria-hidden="true" src="https://cdn.simpleicons.org/telegram/26A5E4" class="icon" alt=""> Grupo do Telegram</a>
+
+        <!-- NOVO: Grupo Especial de Cupons -->
+        <a class="btn p-3 text-center transition text-amber-400 bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/30" href="#" target="_blank" rel="noopener noreferrer">
+          <span aria-hidden="true" class="icon" style="width:auto;height:auto">🌟</span> Grupo Especial de Cupons
+        </a>
+
         <a class="btn p-3 text-center transition text-pink-500 bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/30" href="#" target="_blank" rel="noopener noreferrer"><span aria-hidden="true" class="icon" style="width:auto;height:auto">💄</span> Acessórios & Maquiagem</a>
         <a class="btn p-3 text-center transition text-rose-500 bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30" href="#" target="_blank" rel="noopener noreferrer"><span aria-hidden="true" class="icon" style="width:auto;height:auto">👗</span> Acessórios Femininos</a>
         <a class="btn p-3 text-center transition text-white bg-white/10 hover:bg-white/15 border border-white/15" href="#" target="_blank" rel="noopener noreferrer"><img aria-hidden="true" src="https://cdn.simpleicons.org/x/FFFFFF" class="icon" alt=""> Perfil no X</a>
@@ -74,7 +80,6 @@
 
     <footer class="mt-12 text-center text-xs text-zinc-400">
       <p>© <span id="ano"></span> Cupons e Ofertas Amorim +. Todos os direitos reservados.</p>
-     
     </footer>
   </main>
 
@@ -82,6 +87,7 @@
     const LINKS = {
       whatsapp: "https://chat.whatsapp.com/LkOqxXxsk3p8BgJtH0ovfk?mode=ac_t",
       telegram: "https://t.me/+rj_9XAn871xlN2Ex",
+      especial: "https://chat.whatsapp.com/E0XLMiUqbNiDGzv1DG2EcR", // << troque aqui
       acessoriosMaquiagem: "https://chat.whatsapp.com/ElrUAKMqSwuDGHecvLJrRo",
       acessoriosFemininos: "https://chat.whatsapp.com/ElrUAKMqSwuDGHecvLJrRo",
       x: "https://x.com/AmorimOfertas?t=ftrsI48egpyPx3WhmFK7FA&s=09",
@@ -97,6 +103,7 @@
       const text = a.textContent || '';
       if (text.includes('WhatsApp')) a.href = LINKS.whatsapp;
       if (text.includes('Telegram')) a.href = LINKS.telegram;
+      if (text.includes('Grupo Especial de Cupons')) a.href = LINKS.especial; // mapeamento novo
       if (text.includes('Acessórios & Maquiagem')) a.href = LINKS.acessoriosMaquiagem;
       if (text.includes('Acessórios Femininos')) a.href = LINKS.acessoriosFemininos;
       if (text.includes('Perfil no X')) a.href = LINKS.x;
