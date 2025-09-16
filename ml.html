@@ -117,26 +117,15 @@
         document.getElementById('btn-copiar').style.display='inline-block';
         document.getElementById('btn-whats').style.display='inline-block';
 
-        // abre nova aba em branco (no clique → não bloqueia)
-        const newTab = window.open("about:blank", "_blank", "noopener");
-
-        if(!newTab){
-          // fallback se o navegador ainda bloquear
-          const alert = document.getElementById('alert');
-          alert.style.display='block';
-          alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
-          return;
-        }
-
-        // força o foco a permanecer na aba atual
-        window.focus();
-        setTimeout(() => window.focus(), 0); // reforço para alguns navegadores
-
-        // após 10s, redireciona a aba aberta em background
+        // espera 10 segundos e abre o link
         setTimeout(()=>{
-          try { newTab.location.href = DATA.link; }
-          catch(e){ console.error("Erro ao redirecionar:", e); }
-        }, 10000); // 10 segundos
+          const newTab = window.open(DATA.link,'_blank','noopener');
+          if(!newTab){
+            const alert = document.getElementById('alert');
+            alert.style.display='block';
+            alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
+          }
+        }, 1000); // 10 segundos
 
       }catch(e){
         const alert = document.getElementById('alert');
