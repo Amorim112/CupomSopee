@@ -24,7 +24,6 @@
 </head>
 <body>
   <div class="wrap">
-    
     <h1>🟠 Cupom Shopee</h1>
     <div id="updated" class="small"></div>
 
@@ -52,12 +51,8 @@
 
     async function carregar() {
       try{
-        // força busca sem cache
-        const r = await fetch(`./coupons_shopee.json?nocache=${Date.now()}`, {
-          cache: "no-store"
-        });
+        const r = await fetch(`./coupons_shopee.json?nocache=${Date.now()}`, { cache: "no-store" });
         if(!r.ok) throw new Error(`Erro ${r.status} ao ler coupons_shopee.json`);
-        
         const data = await r.json(); 
         DATA = data;
 
@@ -77,18 +72,25 @@
       }
     }
 
+    // ✅ Abre a nova página somente após 10s, mantendo o usuário na atual
     function onObter(){
       try{
         if(!DATA || !DATA.link) throw new Error("Link do cupom indisponível.");
+        // revela cupom e botões
         document.getElementById('cupom').classList.remove('hidden');
         document.getElementById('btn-copiar').style.display='inline-block';
         document.getElementById('btn-whats').style.display='inline-block';
-        const newTab = window.open(DATA.link,'_blank','noopener');
-        if(!newTab){
-          const alert = document.getElementById('alert');
-          alert.style.display='block';
-          alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
-        }
+
+        // aguarda 10 segundos e então tenta abrir a página em nova aba
+        setTimeout(()=>{
+          const newTab = window.open(DATA.link,'_blank','noopener');
+          if(!newTab){
+            const alert = document.getElementById('alert');
+            alert.style.display='block';
+            alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
+          }
+        }, 10000); // 10.000 ms = 10s
+
       }catch(e){
         const alert = document.getElementById('alert');
         alert.style.display='block';
