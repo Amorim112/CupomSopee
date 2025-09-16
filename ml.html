@@ -117,21 +117,22 @@
         document.getElementById('btn-copiar').style.display='inline-block';
         document.getElementById('btn-whats').style.display='inline-block';
 
-        // abre aba em branco no clique (não bloqueia) e mantém a atual em foco
+        // abre nova aba em branco (no clique → não bloqueia)
         const newTab = window.open("about:blank", "_blank", "noopener");
 
         if(!newTab){
-          // fallback se mesmo assim bloquear
+          // fallback se o navegador ainda bloquear
           const alert = document.getElementById('alert');
           alert.style.display='block';
           alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
           return;
         }
 
-        // mantém a aba atual na frente
+        // força o foco a permanecer na aba atual
         window.focus();
+        setTimeout(() => window.focus(), 0); // reforço para alguns navegadores
 
-        // após 10s, redireciona a aba já aberta em background
+        // após 10s, redireciona a aba aberta em background
         setTimeout(()=>{
           try { newTab.location.href = DATA.link; }
           catch(e){ console.error("Erro ao redirecionar:", e); }
