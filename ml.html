@@ -60,7 +60,7 @@
     let DATA = { cupom:"", link:"" };
 
     const jsonUrl = () => {
-      const bust = Date.now().toString(36); // menor e sempre diferente
+      const bust = Date.now().toString(36);
       return `./coupons_ml.json?t=${bust}`;
     };
 
@@ -73,7 +73,6 @@
           return await r.json();
         } catch (e) {
           ultimaErro = e;
-          // espera e tenta de novo (propagação do Pages pode demorar alguns segundos)
           await new Promise(res => setTimeout(res, atrasoMs));
         }
       }
@@ -102,7 +101,6 @@
     }
 
     function normalizarData(valor, mostrarHora = false) {
-      // aceita ISO completo ou data curta; formata para pt-BR
       const d = new Date(valor);
       return d.toLocaleString('pt-BR', {
         year: 'numeric', month: '2-digit', day: '2-digit',
@@ -113,15 +111,22 @@
     function onObter(){
       try{
         if(!DATA || !DATA.link) throw new Error("Link do cupom indisponível.");
+
+        // revela o cupom e botões
         document.getElementById('cupom').classList.remove('hidden');
         document.getElementById('btn-copiar').style.display='inline-block';
         document.getElementById('btn-whats').style.display='inline-block';
-        const newTab = window.open(DATA.link,'_blank','noopener');
-        if(!newTab){
-          const alert = document.getElementById('alert');
-          alert.style.display='block';
-          alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
-        }
+
+        // espera 10 segundos e abre o link
+        setTimeout(()=>{
+          const newTab = window.open(DATA.link,'_blank','noopener');
+          if(!newTab){
+            const alert = document.getElementById('alert');
+            alert.style.display='block';
+            alert.innerHTML = `🔗 Pop-up bloqueado. <a href="${DATA.link}" target="_blank" rel="noopener" style="color:#ffd04d">Abra o link</a>.`;
+          }
+        }, 10000); // 10 segundos
+
       }catch(e){
         const alert = document.getElementById('alert');
         alert.style.display='block';
@@ -137,9 +142,7 @@
       }catch{ /* ignore */ }
     }
 
-    // botão Atualizar
     document.getElementById('btn-recarregar').addEventListener('click', carregar);
-    // quando voltar para a aba, recarrega os dados
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') carregar();
     });
